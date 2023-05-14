@@ -1,7 +1,8 @@
 # **Getting Started**.
 
 ## About the project.
-This project is a simple app schedular for waste pickup online, this is the dashboard part of the app for administrators, if you want to see the main app [here is the link](https://github.com/Cogenie/waste-mobile) to visit the repo.
+About the project will come later.
+<!-- This project is a simple app schedular for waste pickup online, this is the dashboard part of the app for administrators, if you want to see the main app [here is the link](https://github.com/Cogenie/waste-mobile) to visit the repo. -->
 
 ## Prerequisites
 
