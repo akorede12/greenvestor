@@ -7,7 +7,6 @@ import { ToastContainer } from 'react-toastify';
 // loader component
 import Loader from '../components/loader';
 
-
 /* A React component that is rendering the routes. */
 export default function () {
     return <React.Suspense fallback={<Loader />}>

@@ -1,2 +1,2 @@
-// assets and fake data should be done here
+// dummy data should be done here
 export { };
