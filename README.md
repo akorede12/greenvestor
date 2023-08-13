@@ -2,7 +2,6 @@
 
 ## About the project.
 About the project will come later.
-<!-- This project is a simple app schedular for waste pickup online, this is the dashboard part of the app for administrators, if you want to see the main app [here is the link](https://github.com/Cogenie/waste-mobile) to visit the repo. -->
 
 ## Prerequisites
 
@@ -18,7 +17,7 @@ To clone this repo, you first have to open command prompt (on window), or termin
 
 ``` bash
     > # cd into the directory that you want to clone the project
-    > git clone https://github.com/Cogenie/smb-frontend-web <project_name>
+    > git clone https://github.com/GreenVestor/Bnb_hack.git <project_name>
     > cd <project_name>
     > npm install
     > npm start # a command to run the project in development
