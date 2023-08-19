@@ -1,2 +1,58 @@
 footer
+    gap: 4em
+    width: 100%
     display: flex
+    padding: 3em 5%
+    background: #ffffff
+    flex-direction: column
+
+    .logo
+        height: 5em
+
+    .column
+        gap: 2em
+        width: 100%
+        display: flex
+        flex-wrap: wrap
+        align-items: center
+        justify-content: space-between
+
+        &:first-child
+            align-items: flex-start
+
+        @media screen and (width <= 60em)
+            justify-content: center
+
+        nav
+            gap: 1em
+            flex: 0 22em
+            display: flex
+            flex-wrap: wrap
+
+            div
+                gap: 1.2em
+                flex: 0 10em
+                display: flex
+                flex-direction: column
+                align-items: flex-start
+                justify-content: flex-start
+
+                a
+                    font-weight: 500
+                    flex-wrap: nowrap
+
+        .social-links
+            gap: 2em
+            display: flex
+            align-items: center
+            justify-content: center
+
+            a
+                width: 2.5em
+                height: 2.5em
+                display: grid
+                cursor: pointer
+                border-radius: .5em
+                background: #2A2E44
+                text-decoration: none
+                place-content: center center

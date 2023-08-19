@@ -1,2 +1,49 @@
 header
+    top: 0
+    gap: 2em
+    width: 100%
+    z-index: 100
     display: flex
+    padding: 2em 10%
+    transition: 200ms
+    align-items: center
+    justify-content: baseline
+
+    #logo
+        img
+            height: 2em
+            object-fit: contain
+
+    a
+        // color: white
+        font-weight: 500
+        font-size: 1.2em
+        text-transform: capitalize
+
+    nav
+        gap: 2em
+        height: 100%
+        display: flex
+        align-items: flex-end
+        justify-content: flex-start
+
+        &.buttons
+            margin-left: auto
+            justify-content: flex-end
+
+            a
+                transition: 200ms
+                &:first-child
+                    text-decoration: underline
+
+                &:last-child
+                    color: black
+                    background: white
+                    padding: .2em 1em
+                    transition: 200ms linear
+                    border: .15em solid var(--cyan)
+                    border-left-width: 1.2em !important
+
+                    // &:hover
+                    //     border-left-width: .6em !important
+                    //     border-right-width: .6em !important
