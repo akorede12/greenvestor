@@ -1,5 +1,6 @@
 import './style.sass';
 import { useState } from 'react';
+import { FaLongArrowAltRight } from 'react-icons/fa';
 
 export default function () {
     const [email, setEmail] = useState('');
@@ -15,7 +16,9 @@ export default function () {
         <h3>Subscribe to our Newsletter</h3>
         <div>
             <input disabled={loading} type="email" required value={email} onChange={({ currentTarget }) => setEmail(currentTarget.value)} />
-            <button type='submit' disabled={loading}></button>
+            <button type='submit' disabled={loading}>
+                <FaLongArrowAltRight size={25} />
+            </button>
         </div>
     </form>;
 }

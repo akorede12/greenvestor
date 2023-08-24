@@ -1,0 +1,73 @@
+.project-card
+    flex: none
+    display: flex
+    overflow: hidden
+    aspect-ratio: 4/3
+    border-radius: .5em
+    flex-direction: column
+    width: clamp(22em, 35vw, 50em)
+
+    .flex
+        gap: 2px
+        width: 100%
+        flex: 1 0 50%
+        position: relative
+        flex-direction: column
+        background: var(--clay)
+
+        &:last-child
+            background: var(--green)
+
+        img
+            width: 100%
+            height: 100%
+            object-fit: cover
+            background: var(--clay)
+
+        .column
+            gap: 1em
+            padding: 1em
+            display: flex
+            align-items: center
+
+            .grid
+                flex: 1 60%
+                color: var(--white)
+                flex-direction: column
+                justify-content: center
+
+                &:first-child
+                    flex-basis: 40%
+
+                h3
+                    line-height: 1
+                    font-weight: 700
+                    font-size: clamp(1em, 1.5vw, 3em)
+
+                h4
+                    font-weight: 400
+                    font-size: 0.8em
+
+                span
+                    font-weight: 700px
+
+                p
+                    font-size: 0.7em
+
+    &.loading
+        .flex
+            &:first-child
+                animation: image-loader 2000ms linear alternate infinite
+                background: linear-gradient(-45deg, #b6b6b6, #dbdbdb) top left
+
+                img
+                    display: none
+
+@keyframes image-loader
+    0%
+        background-size: 200%
+
+    100%
+        background-size: 500%
+
+    // @keyframes header-loader
