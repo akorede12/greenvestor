@@ -1,4 +1,6 @@
 import './style.sass';
+import { Link } from 'react-router-dom';
+import {HiSearch} from 'react-icons/hi';
 import { useState, useEffect, useRef } from "react";
 import { logoWhite, logoGreen } from '../../config';
 
@@ -6,7 +8,6 @@ export default function ({ opague = false }) {
     const root = useRef(document.querySelector('#root'));
 
     const [status, setStatus] = useState(opague);
-    const [color, setColor] = useState(opague ? 'text-black' : 'text-white');
 
     useEffect(() => {
         root.current?.addEventListener('scroll', handleScroll);
@@ -14,23 +15,23 @@ export default function ({ opague = false }) {
     }, []);
 
     const handleScroll = (ev) => {
-        console.log(ev.target?.scrollTop);
         setStatus(ev.target.scrollTop > 50 || opague);
     };
 
     return <header className={`${opague ? 'bg-white sticky' : 'fixed'} ${status == true && 'bg-white'}`}>
-        <a className={status ? 'text-black' : 'text-white'} href="/" id="logo"><img src={status ? logoGreen : logoWhite} alt="" /></a>
+        <Link className={status ? 'text-black' : 'text-white'} to="/" id="logo"><img src={status ? logoGreen : logoWhite} alt="" /></Link>
 
         <nav>
-            <a className={status ? 'text-black' : 'text-white'} href="#">home</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">projects</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">about</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">contact us</a>
+            <Link className={status ? 'text-black' : 'text-white'} to="/">home</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/projects">projects</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/about">about</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/contact">contact us</Link>
+            <HiSearch size={25} className={status ? 'text-black' : 'text-white'} />
         </nav>
 
         <nav className='buttons'>
-            <a className={status ? 'text-black' : 'text-white'} href="#">sign in</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">sign in</a>
+            <Link className={status ? 'text-black' : 'text-white'} to="/signin">sign in</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/signup">sign up</Link>
         </nav>
     </header>;
 };

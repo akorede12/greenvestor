@@ -1,33 +1,34 @@
 import './style.sass';
 import { } from "react";
 import { $newletter } from '../forms';
-import { logoWhite } from '../../config';
+import { logoGreen } from '../../config';
+import { Link } from 'react-router-dom';
 
 export default function () {
     return <footer>
         <div className="column">
-            <img src={logoWhite} alt="" className="logo" />
+            <img src={logoGreen} alt="" className="logo" />
             <nav>
                 <div>
-                    <a href="#">Home</a>
-                    <a href="#">Projects</a>
-                    <a href="#">About</a>
-                    <a href="#">Contact Us</a>
+                    <Link to="/">Home</Link>
+                    <Link to="/projects">Projects</Link>
+                    <Link to="/about">About</Link>
+                    <Link to="/contact">Contact Us</Link>
                 </div>
                 <div>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">FAQs</a>
-                    <a href="#">Terms of Service</a>
+                    <Link to="#">Privacy Policy</Link>
+                    <Link to="#">FAQs</Link>
+                    <Link to="#">Terms of Service</Link>
                 </div>
             </nav>
         </div>
         <div className="column">
             <$newletter />
             <div className="social-links">
-                <a href='#'></a>
-                <a href='#'></a>
-                <a href='#'></a>
-                <a href='#'></a>
+                <a href="#" target='_blank'></a>
+                <a href="#" target='_blank'></a>
+                <a href="#" target='_blank'></a>
+                <a href="#" target='_blank'></a>
             </div>
         </div>
     </footer>;

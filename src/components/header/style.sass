@@ -15,7 +15,6 @@ header
             object-fit: contain
 
     a
-        // color: white
         font-weight: 500
         font-size: 1.2em
         text-transform: capitalize
@@ -27,23 +26,27 @@ header
         align-items: flex-end
         justify-content: flex-start
 
+        svg
+            cursor: pointer
+
         &.buttons
             margin-left: auto
             justify-content: flex-end
 
             a
-                transition: 200ms
                 &:first-child
-                    text-decoration: underline
+                transition: 200ms
+                text-decoration: underline
 
                 &:last-child
                     color: black
                     background: white
                     padding: .2em 1em
-                    transition: 200ms linear
+                    text-decoration: none
+                    transition: 100ms linear
                     border: .15em solid var(--cyan)
                     border-left-width: 1.2em !important
 
-                    // &:hover
-                    //     border-left-width: .6em !important
-                    //     border-right-width: .6em !important
+                    &:hover
+                        border-left-width: .6em !important
+                        border-right-width: .6em !important

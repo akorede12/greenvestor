@@ -22,6 +22,7 @@ section#banner
             font-size: clamp(1.2em, 3vw, 5em)
 
     .content
+        gap: 2em
         width: 100%
         display: flex
         padding: 2em
@@ -41,7 +42,6 @@ section#banner
                 flex: 1 22em
                 display: flex
                 padding: 1em
-                // background: red
                 flex-direction: column
                 align-items: flex-start
                 justify-content: flex-start
@@ -109,3 +109,61 @@ section#banner
                         font-weight: 600
                         white-space: nowrap
                         color: var(--green)
+        .projects
+            gap: 1em
+            width: 100%
+            display: flex
+            flex-direction: column
+
+            .indicator
+                gap: .3em
+                width: 100%
+                display: flex
+                font-size: 2em
+                align-items: center
+                justify-content: flex-end
+
+                svg
+                    cursor: pointer
+                    transition: 200ms
+
+                    &:hover
+                        filter: invert(.6)
+
+            .projects-content
+                gap: 2em
+                width: 100%
+                display: flex
+                overflow: auto
+                align-items: center
+                justify-content: flex-start
+
+                &::-webkit-scrollbar
+                    display: none
+        .btn
+            width: 100%
+            padding: 2em
+            display: flex
+            align-items: center
+            justify-content: center
+
+            button, a
+                gap: 1em
+                display: flex
+                padding: 1em 1.6em
+                color: var(--white)
+                align-items: center
+                border-radius: .4em
+                text-decoration: none
+                justify-content: center
+                background: var(--dark-blue)
+
+                svg
+                    transition: 200ms
+
+                b
+                    font-weight: 700
+
+                &:hover svg
+                    transform: translateX(.5em)
+                    
