@@ -2,4 +2,5 @@
 // e.g export { default as $<card_name>} from './<card_folder_name>'
 
 export { default as $project } from './project';
+export { default as $projects } from './projects';
 export { default as $portfolio } from './portfolio';

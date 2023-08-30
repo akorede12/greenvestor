@@ -5,7 +5,9 @@ import $footer from '../../components/footer';
 export default function ($element) {
     return () => (<>
         <$header opague />
-        <$element />
+        <main>
+            <$element />
+        </main>
         <$footer />
     </>);
 } 

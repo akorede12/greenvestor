@@ -1,0 +1,67 @@
+form#search
+    gap: 1em
+    flex: none
+    width: 100%
+    display: flex
+    padding: 2em 10%
+    align-items: center
+    justify-content: space-between
+
+    h3
+        font-size: 1.2em
+        font-weight: 700
+        color: var(--black)
+
+    div
+        height: 2.6em
+        display: flex
+        overflow: hidden
+        border-radius: .5em
+        background: var(--white)
+        flex: 0 clamp(20em, 35vw, 50em)
+        border: .12em solid var(--dark-blue)
+
+        input
+            flex: 1
+            border: none
+            outline: none
+            padding: 0.4em 1em
+
+            &:disabled
+                color: grey
+            
+            &::placeholder
+                font-weight: 400
+
+        button
+            display: flex
+            cursor: pointer
+            padding: .5em 2em
+            transition: 200ms
+            align-items: center
+            color: var(--white)
+            justify-content: center
+            background: var(--dark-blue)
+            border-top-left-radius: inherit
+            border-bottom-left-radius: inherit
+
+            &:hover
+                transform: scale(.8)
+                border-radius: inherit
+
+            &:active
+                transform: scale(.8) translateX(-1em)
+
+            &:disabled
+                background: grey
+                pointer-events: none
+                transform: scale(.8)
+                border-radius: inherit
+
+            svg
+                color: var(--white)
+                animation: spin 1s linear infinite
+
+@keyframes spin
+    to
+        transform: rotate(360deg)

@@ -3,12 +3,12 @@
 @import 'tailwindcss/components'
 
 :root // setting the css varibales, don't forget to update tailwind config file too
-    --cyan: #00FFA0
-    --clay: #FAFAFA
-    --green: #387549
-    --black: #000000
+    --cyan: #00ffa0
+    --clay: #fafafa
     --white: #ffffff
-    --dark-blue: #2A2E44
+    --black: #000000
+    --green: #387549
+    --dark-blue: #2a2e44
 
 * // general styling, reseting margin and padding
     margin: 0
@@ -30,7 +30,7 @@ body // setting the body'swith and some other properties
         justify-content: center
 
     #root // this is solely for root element
-        gap: 5em
+        // gap: 5em
         align-items: initial
         flex-direction: column
         background: var(--clay)
@@ -39,9 +39,10 @@ body // setting the body'swith and some other properties
         &::-webkit-scrollbar
             display: none
 
-        section
+        section, header, footer
             flex: none
             width: 100%
+            padding: 1em 5%
 
     #portal // portal style, it only shows when there are children elements
         top: 0

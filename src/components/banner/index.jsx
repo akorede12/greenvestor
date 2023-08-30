@@ -1,10 +1,11 @@
 import './style.sass';
 import { useState } from 'react';
-import { $project } from '../cards';
-import $projects from '../projects';
+import $projects from '../project';
 import { Link } from 'react-router-dom';
 import { heroImg, leafImg } from '../../config';
-import { BsArrowLeftCircle, BsArrowRightCircle, BsArrowDownCircle } from 'react-icons/bs';
+import { BsArrowRightCircle, BsArrowDownCircle } from 'react-icons/bs';
+
+export { default as $banner } from './detail';
 
 export default function () {
     const [projects, setProjects] = useState(Array.from({ length: 5 }));
