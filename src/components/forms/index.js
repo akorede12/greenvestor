@@ -3,4 +3,5 @@
 
 export { default as $auth } from './auth';
 export { default as $group } from './group';
+export { default as $search } from './search';
 export { default as $newletter } from './newsletter';

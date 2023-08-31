@@ -1,22 +1,24 @@
 import './style.sass';
 import { useState } from 'react';
-import { $project } from '../cards';
-import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs';
+import { $projects } from '../cards';
 
-export default function ({ title = '' }) {
-    const [projects, setProjects] = useState(Array.from({ length: 5 }));
+export default function ({ className }) {
+    const [projects, setProjects] = useState(Array.from({ length: 8 }));
 
-    return <section id="projects">
-        <div className="indicator">
-            <h2>{title}</h2>
-            <div className="btn">
-                <BsArrowLeftCircle />
-                <BsArrowRightCircle />
+    return <section id="projects" className={className}>
+        <div className="header">
+            <h2>Discover Projects</h2>
+            <div className="links">
+                <button>All Projects</button>
+                <button>Energy</button>
+                <button>Agriculture</button>
+                <button>Water</button>
+                <button>Conservation</button>
+                <button>Green</button>
             </div>
         </div>
-
-        <div className="projects-content">
-            {projects.map((_, id) => <$project key={id} />)}
+        <div className="content">
+            {projects.map((_, id) => <$projects key={id} />)}
         </div>
     </section>;
 } 
