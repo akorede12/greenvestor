@@ -21,12 +21,12 @@ export default function ({ className }) {
         <div className="header">
             <h2>Discover Projects</h2>
             <div className="links">
-                <button onClick={handleFilter} title=''>All Projects</button>
-                <button onClick={handleFilter} title='energy'>Energy</button>
-                <button onClick={handleFilter} title='agriculture'>Agriculture</button>
-                <button onClick={handleFilter} title='water'>Water</button>
-                <button onClick={handleFilter} title='conservation'>Conservation</button>
-                <button onClick={handleFilter} title='green'>Green</button>
+                <button onClick={handleFilter} disabled={filter == ''} title=''>All Projects</button>
+                <button onClick={handleFilter} disabled={filter == 'energy'} title='energy'>Energy</button>
+                <button onClick={handleFilter} disabled={filter == 'agriculture'} title='agriculture'>Agriculture</button>
+                <button onClick={handleFilter} disabled={filter == 'water'} title='water'>Water</button>
+                <button onClick={handleFilter} disabled={filter == 'conservation'} title='conservation'>Conservation</button>
+                <button onClick={handleFilter} disabled={filter == 'green'} title='green'>Green</button>
             </div>
         </div>
         <div className="content">
