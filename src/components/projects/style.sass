@@ -37,7 +37,6 @@ section#projects
     .content
         gap: 1em
         display: flex
+        display: grid
         flex: 1 0 auto
-        flex-wrap: wrap
-        align-items: center
-        justify-content: space-around
+        grid-template-columns: repeat(auto-fit, minmax(16em, 16em))

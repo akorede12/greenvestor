@@ -2,8 +2,10 @@ import './style.sass';
 import { useState } from 'react';
 import { $portfolio } from '../cards';
 import { leafImg } from '../../config';
+import { useMyStore } from '../../store';
 
 export default function () {
+    const { invest } = useMyStore();
     const [portfolios, setPortfolios] = useState(Array.from({ length: 5 }));
 
     return <section id="portfolio">
@@ -21,7 +23,8 @@ export default function () {
         </div>
 
         <div className="content">
-            {portfolios.map((_, id) => <$portfolio loading key={id} id={id} />)}
+            {invest.data.map((item, id) => <$portfolio loading key={id} index={id} {...item} />)}
+            
         </div>
     </section>
 } 
