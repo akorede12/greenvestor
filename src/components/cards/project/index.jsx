@@ -1,32 +1,32 @@
 import { Link } from 'react-router-dom';
 import './style.sass';
 import { } from 'react';
+import { BsArrowRightCircle } from 'react-icons/bs';
 
-export default function ({ loading }) {
+export default function ({ id, image, loading, title, summary, amount }) {
     return <div className={`project-card ${loading == true && 'loading'}`}>
         <div className="flex">
-            {/* <img src="" alt="" /> */}
+            <img src={image} alt="" />
         </div>
         <div className="flex">
             <div className="column">
                 <div className="grid">
-                    <h3>Lorem ipsum dolor sit.</h3>
+                    <h3>{title}</h3>
                 </div>
                 <div className="grid">
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Nostrum enim incidunt atque porro provident dicta,
-                        facere quidem vitae. Aut, nostrum!
-                    </p>
+                    <p>{summary}</p>
                 </div>
             </div>
             <div className="column">
                 <div className="grid">
                     <h4>Total Investment needed</h4>
-                    <span>250,000 Naira</span>
+                    <span>{amount?.toLocaleString?.()} Naira</span>
                 </div>
                 <div className="grid">
-                    <Link to='/'></Link>
+                    <Link to={`/projects/${id}`}>
+                        <b>view project</b>
+                        <BsArrowRightCircle size={20} />
+                    </Link>
                 </div>
             </div>
         </div>

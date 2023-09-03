@@ -1,10 +1,10 @@
 import './style.sass';
-import { useState } from 'react';
 import { $project } from '../cards';
+import { useMyStore } from '../../store';
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs';
 
 export default function ({ title = '', className }) {
-    const [projects, setProjects] = useState(Array.from({ length: 5 }));
+    const { projects } = useMyStore();
 
     return <section id="project" className={className}>
         <div className="indicator">
@@ -16,7 +16,7 @@ export default function ({ title = '', className }) {
         </div>
 
         <div className="projects-content">
-            {projects.map((_, id) => <$project key={id} />)}
+            {projects.data.slice(0, 5).map((items, id) => <$project key={id} {...items} />)}
         </div>
     </section>;
 } 

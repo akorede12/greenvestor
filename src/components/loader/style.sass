@@ -1,2 +1,42 @@
-#loader
-    display: flex
+section#loader
+    height: 100vh
+    display: grid
+    place-content: center center
+
+    span
+        --size: 20em
+        position: relative
+        width: var(--size)
+        height: var(--size)
+        border-radius: 100%
+        animation: rotate 5s linear infinite
+
+        i
+            width: inherit
+            height: inherit
+            position: absolute
+            border-radius: inherit
+            background: var(--dark-blue)
+            animation: loader 2.5s linear infinite
+
+            &:last-child
+                animation-delay: -1.25s
+                background: var(--green)
+
+@keyframes rotate
+    100%
+        rotate: 360deg
+
+@keyframes loader
+    0%
+        scale: 0
+        transform-origin: left
+    50%
+        scale: 1
+        transform-origin: left
+    51%
+        scale: 1
+        transform-origin: right
+    100%
+        scale: 0
+        transform-origin: right

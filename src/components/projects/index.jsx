@@ -1,24 +1,36 @@
 import './style.sass';
-import { useState } from 'react';
 import { $projects } from '../cards';
+import { useMyStore } from '../../store';
+import { useEffect, useState } from 'react';
 
 export default function ({ className }) {
-    const [projects, setProjects] = useState(Array.from({ length: 8 }));
+    const { projects } = useMyStore();
+    const [filter, setFilter] = useState('');
+    const [filtered, setFiltered] = useState([]);
+
+    const handleFilter = ({ currentTarget: t }) => setFilter(t.title || '');
+
+    useEffect(() => {
+        setFiltered(prev =>
+            projects.data.filter(p => filter.length ? p.category == filter : true)
+        )
+    }, [filter]);
+
 
     return <section id="projects" className={className}>
         <div className="header">
             <h2>Discover Projects</h2>
             <div className="links">
-                <button>All Projects</button>
-                <button>Energy</button>
-                <button>Agriculture</button>
-                <button>Water</button>
-                <button>Conservation</button>
-                <button>Green</button>
+                <button onClick={handleFilter} disabled={filter == ''} title=''>All Projects</button>
+                <button onClick={handleFilter} disabled={filter == 'energy'} title='energy'>Energy</button>
+                <button onClick={handleFilter} disabled={filter == 'agriculture'} title='agriculture'>Agriculture</button>
+                <button onClick={handleFilter} disabled={filter == 'water'} title='water'>Water</button>
+                <button onClick={handleFilter} disabled={filter == 'conservation'} title='conservation'>Conservation</button>
+                <button onClick={handleFilter} disabled={filter == 'green'} title='green'>Green</button>
             </div>
         </div>
         <div className="content">
-            {projects.map((_, id) => <$projects key={id} />)}
+            {filtered.map((item, id) => <$projects key={id} {...item} />)}
         </div>
     </section>;
 } 

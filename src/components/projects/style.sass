@@ -27,17 +27,19 @@ section#projects
                 cursor: pointer
                 font-size: 0.9em
                 font-weight: 500
+                white-space: nowrap
                 border-radius: .4em
                 padding: 0.2em 1.2em
                 border: .12em solid var(--green)
 
-                &.active
+                &:disabled
+                    color: var(--white)
+                    pointer-events: none
                     background: var(--green)
 
     .content
         gap: 1em
         display: flex
+        display: grid
         flex: 1 0 auto
-        flex-wrap: wrap
-        align-items: center
-        justify-content: space-around
+        grid-template-columns: repeat(auto-fit, minmax(16em, 16em))

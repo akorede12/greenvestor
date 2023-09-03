@@ -3,7 +3,7 @@ form#newsletter
     flex: none
     display: flex
     flex-direction: column
-    width: min(24em, 100vw)
+    width: min(24em, 90vw)
     align-items: flex-start
 
     h3
@@ -52,5 +52,12 @@ form#newsletter
                 transform: scale(.8)
                 border-radius: inherit
 
+                svg
+                    animation: spin 1s linear infinite
+
             svg
                 color: var(--white)
+
+@keyframes spin
+    to
+        transform: rotate(360deg)

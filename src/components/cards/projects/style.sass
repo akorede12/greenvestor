@@ -1,18 +1,66 @@
 .projects-card
     display: flex
-    flex: 0 1 18em
     overflow: hidden
     aspect-ratio: 5/6
     border-radius: .5em
     flex-direction: column
-    box-shadow: 0 0 0 .1em rgba(0 0 0 / .1)
+    border: 1px solid var(--green)
+
+    &:hover img
+        transform: scale(1.1)
 
     .flex
+        gap: 1px
+        flex: none
         width: 100%
-        flex: 0 50%
+        height: 50%
+        overflow: hidden
+        flex-direction: column
 
         img
             width: 100%
             height: 100%
-            display: none
             object-fit: cover
+            transition: 300ms
+
+        .column
+            gap: 1em
+            width: 100%
+            display: flex
+            padding: .5em
+            align-items: center
+            justify-content: space-around
+
+            &:last-child
+                flex: 1
+                align-items: center
+                flex-direction: column
+                justify-content: flex-start
+
+                .row
+                    display: flex
+                    flex-direction: column
+                    align-items: flex-start
+                    justify-content: center
+
+                    h4
+                        font-size: 0.8em
+
+                    span
+                        font-size: 0.8em
+
+            h3
+                font-weight: 700
+                font-size: 0.7em
+
+            a
+                font-size: 0.7em
+                color: var(--white)
+                white-space: nowrap
+                padding: 0.5em 1.2em
+                border-radius: 0.4em
+                background: var(--green)
+                text-transform: capitalize
+
+                b
+                    font-size: 0.9em
