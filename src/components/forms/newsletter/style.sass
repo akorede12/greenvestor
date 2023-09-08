@@ -3,7 +3,7 @@ form#newsletter
     flex: none
     display: flex
     flex-direction: column
-    width: min(24em, 100vw)
+    width: min(24em, 90vw)
     align-items: flex-start
 
     h3
@@ -31,7 +31,7 @@ form#newsletter
         button
             display: flex
             cursor: pointer
-            padding: 1em 3em
+            padding: .5em 2em
             transition: 200ms
             align-items: center
             justify-content: center
@@ -51,3 +51,14 @@ form#newsletter
                 pointer-events: none
                 transform: scale(.8)
                 border-radius: inherit
+
+                svg
+                    animation: spin 1s linear infinite
+
+            svg
+                color: var(--white)
+
+@keyframes spin
+    to
+        transform: rotate(360deg)
+    

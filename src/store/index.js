@@ -1,9 +1,11 @@
 import * as auth from './slice/auth.slice';
+import * as invest from './slice/invest.slice';
+import * as projects from './slice/project.slice';
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-const store = configureStore({ reducer: { auth: auth.default } });
+const store = configureStore({ reducer: { auth: auth.default, projects: projects.default, invest: invest.default } });
 
 export default store;
 
@@ -18,6 +20,9 @@ export const useMyDispatch = () => {
 
     return ({
         login: data => dispatch(auth.login(data)),
+        allProjects: () => dispatch(projects.all()),
+        allInvestments: () => dispatch(invest.all()),
+
     })
 }
 
@@ -29,5 +34,7 @@ export const useMyDispatch = () => {
 export const useMyStore = () => {
     return ({
         auth: useSelector(state => state.auth),
+        invest: useSelector(state => state.invest),
+        projects: useSelector(state => state.projects),
     })
 };

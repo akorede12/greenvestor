@@ -1,23 +1,32 @@
 header
     top: 0
-    gap: 2em
+    gap: 1em
     width: 100%
     z-index: 100
     display: flex
-    padding: 2em 10%
     transition: 200ms
     align-items: center
-    justify-content: baseline
+    justify-content: baseline !important
+
+    svg
+        display: none
+        cursor: pointer
+
+        @media screen and ( max-width: 60rem)
+            display: flex
 
     #logo
         img
             height: 2em
             object-fit: contain
 
+            @media screen and ( max-width: 60rem)
+                font-size: .7em
+
     a
-        // color: white
         font-weight: 500
         font-size: 1.2em
+        white-space: nowrap
         text-transform: capitalize
 
     nav
@@ -27,23 +36,59 @@ header
         align-items: flex-end
         justify-content: flex-start
 
+        @media screen and ( max-width: 60rem)
+            svg.search
+                display: none
+
+            &:nth-of-type(1)
+                top: 0
+                left: 0
+                bottom: 0
+                width: 0em
+                gap: 1.4em
+                z-index: 10
+                padding: 15% 0
+                position: fixed
+                overflow: hidden
+                transition: 300ms
+                flex-direction: column
+                align-items: flex-start
+                background: var(--white)
+                justify-content: flex-start
+                // border-top-right-radius: 2em
+                // border-bottom-right-radius: 2em
+                box-shadow: 10em 0 0 100em transparent
+
+                &.open
+                    width: min(20em, 70vw)
+                    padding: 15%
+                    box-shadow: 10em 0 0 100em rgba(0 0 0 / .6)
+
+            &:nth-of-type(2)
+                font-size: 0.6em
+
+        svg
+            cursor: pointer
+            font-size: 0.6em
+
         &.buttons
             margin-left: auto
             justify-content: flex-end
 
             a
-                transition: 200ms
                 &:first-child
+                    transition: 200ms
                     text-decoration: underline
 
                 &:last-child
                     color: black
                     background: white
                     padding: .2em 1em
-                    transition: 200ms linear
+                    text-decoration: none
+                    transition: 100ms linear
                     border: .15em solid var(--cyan)
                     border-left-width: 1.2em !important
 
-                    // &:hover
-                    //     border-left-width: .6em !important
-                    //     border-right-width: .6em !important
+                    &:hover
+                        border-left-width: .6em !important
+                        border-right-width: .6em !important

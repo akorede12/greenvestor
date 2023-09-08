@@ -1,0 +1,26 @@
+section#auth
+    width: 100vw
+    height: 100vh
+    display: flex
+    position: relative
+    align-items: center
+    justify-content: center
+
+    &::before
+        --x: 3em
+        content: ''
+        height: 40vh
+        top: var(--x)
+        position: absolute
+        border-radius: 1em
+        width: calc(100% - (var(--x) * 2))
+        background: linear-gradient(45deg, var(--green), var(--dark-blue))
+
+    &::after
+        content: ''
+        bottom: 0
+        left: 0
+        width: 100%
+        padding: 2em
+        position: absolute
+        background: var(--dark-blue)

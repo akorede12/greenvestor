@@ -1,12 +1,19 @@
 import './style.sass';
-import { useState, useEffect, useRef } from "react";
+import { Link } from 'react-router-dom';
+import { HiSearch } from 'react-icons/hi';
+import { GrFormClose } from 'react-icons/gr';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { useState, useEffect, useRef, useMemo } from "react";
 import { logoWhite, logoGreen } from '../../config';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-export default function ({ opague = false }) {
+export default function ({ opague = false, fixed = false }) {
     const root = useRef(document.querySelector('#root'));
 
+    const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(opague);
-    const [color, setColor] = useState(opague ? 'text-black' : 'text-white');
+
+    const $btn = useMemo(() => open ? GrFormClose : GiHamburgerMenu, [open]);
 
     useEffect(() => {
         root.current?.addEventListener('scroll', handleScroll);
@@ -14,23 +21,26 @@ export default function ({ opague = false }) {
     }, []);
 
     const handleScroll = (ev) => {
-        console.log(ev.target?.scrollTop);
         setStatus(ev.target.scrollTop > 50 || opague);
     };
 
-    return <header className={`${opague ? 'bg-white sticky' : 'fixed'} ${status == true && 'bg-white'}`}>
-        <a className={status ? 'text-black' : 'text-white'} href="/" id="logo"><img src={status ? logoGreen : logoWhite} alt="" /></a>
+    return <header className={`${status ? 'bg-white' : 'transparent'} ${fixed ? 'fixed' : 'sticky'}`}>
+        <Link className={status ? 'text-black' : 'text-white'} to="/" id="logo"><img src={status ? logoGreen : logoWhite} alt="" /></Link>
 
-        <nav>
-            <a className={status ? 'text-black' : 'text-white'} href="#">home</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">projects</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">about</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">contact us</a>
+        <nav className={open ? 'open' : ''}>
+            <Link className={status ? 'text-black' : 'text-white'} to="/">home</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/projects">projects</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/about">about</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/contact">contact us</Link>
+            <HiSearch size={25} className={`search ${status ? 'text-black' : 'text-white'}`} />
         </nav>
 
         <nav className='buttons'>
-            <a className={status ? 'text-black' : 'text-white'} href="#">sign in</a>
-            <a className={status ? 'text-black' : 'text-white'} href="#">sign in</a>
+            {/* <Link className={status ? 'text-black' : 'text-white'} to="/signin">sign in</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/signup">sign up</Link> */}
+            <ConnectButton />
         </nav>
+
+        <$btn size={20} onClick={() => setOpen($ => !$)} color='grey' />
     </header>;
 };

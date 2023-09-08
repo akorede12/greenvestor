@@ -9,6 +9,7 @@ import Loader from '../components/loader';
 
 /* A React component that is rendering the routes. */
 export default function () {
+    // return <Loader />
     return <React.Suspense fallback={<Loader />}>
         <RouterDom.BrowserRouter>
             <RouterDom.Routes>
