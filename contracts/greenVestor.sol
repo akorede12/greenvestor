@@ -1,100 +1,116 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract LoanContract {
-    struct Loan {
-        address lender;
-        address borrower;
-        uint256 loanAmount;
-        uint256 interestRate;
-        uint256 repaymentAmount;
-        uint256 repaymentTerm;
-        uint256 remainingAmount;
-        bool isClosed;
+contract ProfitDistribution {
+    address public owner;
+    mapping(address => uint256) public investments;
+    mapping(address => uint256) public profits;
+
+    uint256 public totalInvestment;
+    uint256 public totalProfits;
+
+    uint256 public RATE_OF_RETURN = 10; // 10% fixed rate of return
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
     }
-
-    mapping(address => uint256) public balances;
-    Loan[] public loans;
-
-    event LoanCreated(
-        address indexed lender,
-        address indexed borrower,
-        uint256 loanAmount,
-        uint256 interestRate,
-        uint256 repaymentAmount,
-        uint256 repaymentTerm
+    event Investment(
+        address indexed investor,
+        uint256 amount,
+        uint256 investmentAmount
     );
-    event LoanRepaid(address indexed borrower, uint256 repaymentAmount);
 
-    function createLoan(
-        address _borrower,
-        uint256 _loanAmount,
-        uint256 _interestRate,
-        uint256 _repaymentTerm
-    ) external {
-        require(_borrower != address(0), "Invalid borrower address.");
-        require(_loanAmount > 0, "Loan amount must be greater than zero.");
-        require(_interestRate > 0, "Interest rate must be greater than zero.");
-        require(
-            _repaymentTerm > 0,
-            "Repayment term must be greater than zero."
-        );
+    //event Investment(address indexed investor, uint256 amount);
+    event ProfitDistributed(address indexed investor, uint256 amount);
 
-        uint256 repaymentAmount = (_loanAmount * (100 + _interestRate)) / 100;
-
-        Loan memory newLoan = Loan({
-            lender: msg.sender,
-            borrower: _borrower,
-            loanAmount: _loanAmount,
-            interestRate: _interestRate,
-            repaymentAmount: repaymentAmount,
-            repaymentTerm: _repaymentTerm,
-            remainingAmount: repaymentAmount,
-            isClosed: false
-        });
-
-        loans.push(newLoan);
-
-        emit LoanCreated(
-            msg.sender,
-            _borrower,
-            _loanAmount,
-            _interestRate,
-            repaymentAmount,
-            _repaymentTerm
-        );
+    constructor() {
+        owner = msg.sender;
     }
 
-    function repayLoan(uint256 _loanIndex) external payable {
-        require(_loanIndex < loans.length, "Invalid loan index.");
-        Loan storage loan = loans[_loanIndex];
+    // function invest(uint256 _investmentAmount) external payable {
+    //     require(
+    //         _investmentAmount > 0,
+    //         "Investment amount must be greater than zero."
+    //     );
+    //     //require(_investmentAmount == msg.value, "Sent value must match the specified amount.");
+
+    //     investments[msg.sender] += _investmentAmount;
+    //     totalInvestment += _investmentAmount;
+
+    //     emit Investment(msg.sender, _investmentAmount, _investmentAmount);
+    // }
+
+    //function invest() external payable {
+    //    require(msg.value > 0, "Investment amount must be greater than zero.");
+    //
+    //    investments[msg.sender] += msg.value;
+    //    totalInvestment += msg.value;
+    //
+    //    emit Investment(msg.sender, msg.value);
+    //}
+
+    function distributeProfits() external {
         require(
-            loan.borrower == msg.sender,
-            "Only the borrower can repay the loan."
-        );
-        require(!loan.isClosed, "Loan is already closed.");
-        require(
-            msg.value == loan.repaymentAmount,
-            "Incorrect repayment amount."
+            totalInvestment > 0,
+            "No investments available for profit distribution."
         );
 
-        loan.remainingAmount -= msg.value;
-        if (loan.remainingAmount == 0) {
-            loan.isClosed = true;
+        for (uint256 i = 0; i < totalInvestment; i++) {
+            address investor = msg.sender;
+            uint256 investmentAmount = investments[investor];
+            uint256 profit = (investmentAmount * RATE_OF_RETURN) / 100;
+
+            profits[investor] += profit;
+            totalProfits += profit;
+
+            emit ProfitDistributed(investor, profit);
         }
 
-        balances[loan.lender] += msg.value;
-
-        emit LoanRepaid(msg.sender, msg.value);
+        // Reset investments and total investment after profit distribution
+        totalInvestment = 0;
+        for (uint256 i = 0; i < totalInvestment; i++) {
+            address investor = msg.sender;
+            investments[investor] = 0;
+        }
     }
 
-    function withdraw() external {
-        require(balances[msg.sender] > 0, "No funds available for withdrawal.");
+    function withdrawProfits() external {
+        require(profits[msg.sender] > 0, "No profits available to withdraw.");
 
-        uint256 amountToWithdraw = balances[msg.sender];
-        balances[msg.sender] = 0;
+        uint256 amountToWithdraw = profits[msg.sender];
+        profits[msg.sender] = 0;
+        totalProfits -= amountToWithdraw;
 
         payable(msg.sender).transfer(amountToWithdraw);
+    }
+
+    function getRateOfReturn() external view returns (uint256) {
+        return RATE_OF_RETURN;
+    }
+
+    function setRateOfReturn(uint256 newRate) external onlyOwner {
+        RATE_OF_RETURN = newRate;
+    }
+
+    // Getter function to get the total investments of an investor
+    function getInvestment(address investor) external view returns (uint256) {
+        return investments[investor];
+    }
+
+    // Getter function to get the total profits of an investor
+    function getProfits(address investor) external view returns (uint256) {
+        return profits[investor];
+    }
+
+    // Getter function to get the total investment value
+    function getTotalInvestment() external view returns (uint256) {
+        return totalInvestment;
+    }
+
+    // Getter function to get the total profits distributed
+    function getTotalProfits() external view returns (uint256) {
+        return totalProfits;
     }
 }
 
@@ -168,21 +184,49 @@ contract ProjectContract {
         emit ProjectCreated(msg.sender, _name, _description, _capitalNeeded);
     }
 
-    function invest(address _project) external payable {
+    function invest(address _project, uint256 _amount) external payable {
         require(
             bytes(projects[_project].name).length > 0,
             "Project does not exist."
         );
-        require(msg.value > 0, "Investment amount must be greater than zero.");
+        require(_amount > 0, "Investment amount must be greater than zero.");
+        //require(msg.value == _amount, "Sent value must match the specified amount.");
 
         Project storage project = projects[_project];
-        project.investments[msg.sender] += msg.value;
+        project.investments[msg.sender] += _amount;
         project.investors.push(msg.sender);
 
-        emit InvestmentMade(msg.sender, _project, msg.value);
+        emit InvestmentMade(msg.sender, _project, _amount);
     }
 
-    function withdrawFunds(address _project) external {
+    function payoutProfits(address _project) external payable {
+        require(
+            msg.sender == _project || msg.sender == platformOwner,
+            "Only the project creator or platform owner can call this function."
+        );
+
+        Project storage project = projects[_project];
+        require(project.isApproved, "Project is not approved yet.");
+
+        uint256 totalProfits = address(this).balance - project.capitalNeeded;
+
+        require(totalProfits > 0, "No profits available to payout.");
+
+        for (uint256 i = 0; i < project.investors.length; i++) {
+            address investor = project.investors[i];
+            uint256 investmentAmount = project.investments[investor];
+            uint256 profit = (investmentAmount * totalProfits) /
+                project.capitalNeeded;
+
+            project.investments[investor] = 0;
+
+            payable(investor).transfer(profit);
+
+            emit ProfitsPaid(_project, profit);
+        }
+    }
+
+    function withdrawFunds(address _project) external payable {
         Project storage project = projects[_project];
 
         require(
@@ -220,93 +264,51 @@ contract ProjectContract {
         project.isApproved = true;
     }
 
-    function payoutProfits(address _project) external {
-        require(
-            msg.sender == _project || msg.sender == platformOwner,
-            "Only the project creator or platform owner can call this function."
-        );
-
+    function getProjectDetails(
+        address _project
+    )
+        external
+        view
+        returns (
+            string memory name,
+            address creator,
+            string memory description,
+            uint256 capitalNeeded,
+            bool isApproved
+        )
+    {
         Project storage project = projects[_project];
-        require(project.isApproved, "Project is not approved yet.");
-
-        uint256 totalProfits = address(this).balance - project.capitalNeeded;
-
-        require(totalProfits > 0, "No profits available to payout.");
-
-        for (uint256 i = 0; i < project.investors.length; i++) {
-            address investor = project.investors[i];
-            uint256 investmentAmount = project.investments[investor];
-            uint256 profit = (investmentAmount * totalProfits) /
-                project.capitalNeeded;
-
-            project.investments[investor] = 0;
-
-            payable(investor).transfer(profit);
-
-            emit ProfitsPaid(_project, profit);
-        }
-    }
-}
-
-contract ProfitDistribution {
-    mapping(address => uint256) public investments;
-    mapping(address => uint256) public profits;
-
-    uint256 public totalInvestment;
-    uint256 public totalProfits;
-
-    uint256 public constant RATE_OF_RETURN = 10; // 10% fixed rate of return
-
-    event Investment(address indexed investor, uint256 amount);
-    event ProfitDistributed(address indexed investor, uint256 amount);
-
-    function invest() external payable {
-        require(msg.value > 0, "Investment amount must be greater than zero.");
-
-        investments[msg.sender] += msg.value;
-        totalInvestment += msg.value;
-
-        emit Investment(msg.sender, msg.value);
-    }
-
-    function distributeProfits() external {
-        require(
-            totalInvestment > 0,
-            "No investments available for profit distribution."
+        return (
+            project.name,
+            project.creator,
+            project.description,
+            project.capitalNeeded,
+            project.isApproved
         );
-
-        // uint256 totalReturns = (totalInvestment * RATE_OF_RETURN) / 100;
-
-        for (uint256 i = 0; i < totalInvestment; i++) {
-            address investor = msg.sender;
-            uint256 investmentAmount = investments[investor];
-            uint256 profit = (investmentAmount * RATE_OF_RETURN) / 100;
-
-            profits[investor] += profit;
-            totalProfits += profit;
-
-            emit ProfitDistributed(investor, profit);
-        }
-
-        // Reset investments and total investment after profit distribution
-        totalInvestment = 0;
-        for (uint256 i = 0; i < totalInvestment; i++) {
-            address investor = msg.sender;
-            investments[investor] = 0;
-        }
     }
 
-    function withdrawProfits() external {
-        require(profits[msg.sender] > 0, "No profits available to withdraw.");
+    function getInvestorCount(
+        address _project
+    ) external view returns (uint256) {
+        Project storage project = projects[_project];
+        return project.investors.length;
+    }
 
-        uint256 amountToWithdraw = profits[msg.sender];
-        profits[msg.sender] = 0;
-        totalProfits -= amountToWithdraw;
+    function getInvestmentAmount(
+        address _project,
+        address investor
+    ) external view returns (uint256) {
+        Project storage project = projects[_project];
+        return project.investments[investor];
+    }
 
-        payable(msg.sender).transfer(amountToWithdraw);
+    function setProjectApprovalStatus(
+        address _project,
+        bool approved
+    ) external onlyPlatformOwner {
+        Project storage project = projects[_project];
+        project.isApproved = approved;
     }
 }
 
-contract GreenVestor is LoanContract, ProjectContract, ProfitDistribution {
-    constructor() {}
-}
+contract greenVestor is ProfitDistribution, ProjectContract {}

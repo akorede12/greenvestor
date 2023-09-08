@@ -5,6 +5,7 @@ import { GrFormClose } from 'react-icons/gr';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { useState, useEffect, useRef, useMemo } from "react";
 import { logoWhite, logoGreen } from '../../config';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export default function ({ opague = false, fixed = false }) {
     const root = useRef(document.querySelector('#root'));
@@ -35,8 +36,9 @@ export default function ({ opague = false, fixed = false }) {
         </nav>
 
         <nav className='buttons'>
-            <Link className={status ? 'text-black' : 'text-white'} to="/signin">sign in</Link>
-            <Link className={status ? 'text-black' : 'text-white'} to="/signup">sign up</Link>
+            {/* <Link className={status ? 'text-black' : 'text-white'} to="/signin">sign in</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/signup">sign up</Link> */}
+            <ConnectButton />
         </nav>
 
         <$btn size={20} onClick={() => setOpen($ => !$)} color='grey' />

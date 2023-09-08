@@ -29,6 +29,8 @@ coverage
 coverage.json
 typechain
 typechain-types
+secrets.json
+
 
 # Hardhat files
 cache
