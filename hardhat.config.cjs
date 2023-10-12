@@ -1,4 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config({ path: ".env" });
 
 /** @type import('hardhat/config').HardhatUserConfig */
 
@@ -9,8 +10,8 @@ const mnemonic = process.env["MNEMONIC"].toString().trim();
 module.exports = {
   defaultNetwork: "testnet",
   networks: {
-    testnet: {
-      chainId: 97,
+    hardhat: {
+      chainId: 1337,
     },
     testnet: {
       url: "https://bsc-testnet.public.blastapi.io", // "https://data-seed-prebsc-1-s1.bnbchain.org:8545"

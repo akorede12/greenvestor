@@ -32,6 +32,7 @@ export default function ({ opague = false, fixed = false }) {
             <Link className={status ? 'text-black' : 'text-white'} to="/projects">projects</Link>
             <Link className={status ? 'text-black' : 'text-white'} to="/about">about</Link>
             <Link className={status ? 'text-black' : 'text-white'} to="/contact">contact us</Link>
+            <Link className={status ? 'text-black' : 'text-white'} to="/Integration"> integration</Link>
             <HiSearch size={25} className={`search ${status ? 'text-black' : 'text-white'}`} />
         </nav>
 

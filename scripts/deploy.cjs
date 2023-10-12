@@ -9,10 +9,12 @@ const hre = require("hardhat");
 const fs = require("fs");
 
 async function main() {
-  const GreenVestor = await hre.ethers.deployContract("greenVestor", {
+  const GreenVestor = await hre.ethers.deployContract(
+    "greenVestor" /*, {
     gasPrice: ethers.parseUnits("1000000000", "wei"),
     gas: 2000000000,
-  });
+  }*/
+  );
   await GreenVestor.waitForDeployment();
 
   console.log(
