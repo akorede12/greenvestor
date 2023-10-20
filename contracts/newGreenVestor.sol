@@ -109,12 +109,15 @@ contract ProjectContract {
     uint public projectCount;
     mapping(uint => ApprovedProject) public IdToApprovedProject;
 
+    mapping(uint => Project) public IdToProjects;
+
     struct ApprovedProject {
         string name;
         string creator;
         string description;
         uint256 capitalNeeded;
         address creatorAddress;
+        uint Id;
     }
 
     struct Project {
@@ -125,6 +128,7 @@ contract ProjectContract {
         mapping(address => uint256) investments;
         address[] investors;
         bool isApproved;
+        uint Id;
     }
 
     address public platformOwner;
@@ -134,7 +138,8 @@ contract ProjectContract {
         address indexed creator,
         string name,
         string description,
-        uint256 capitalNeeded
+        uint256 capitalNeeded,
+        uint256 projectId
     );
     event InvestmentMade(
         address indexed investor,
@@ -178,16 +183,36 @@ contract ProjectContract {
             "Project already exists for this creator."
         );
 
+        projectCount++;
+
+        uint currentProjectCount = projectCount;
+
         project.name = _name;
         project.creator = _getCreatorName();
         project.description = _description;
         project.capitalNeeded = _capitalNeeded;
         project.isApproved = false;
+        project.Id = currentProjectCount;
 
-        emit ProjectCreated(msg.sender, _name, _description, _capitalNeeded);
+        // update IdToProjects mapping
+        Project storage newProject = IdToProjects[currentProjectCount];
+        newProject.name = project.name;
+        newProject.creator = project.creator;
+        newProject.description = project.description;
+        newProject.capitalNeeded = project.capitalNeeded;
+        newProject.isApproved = project.isApproved;
+        newProject.Id = project.Id;
+
+        emit ProjectCreated(
+            msg.sender,
+            _name,
+            _description,
+            _capitalNeeded,
+            currentProjectCount
+        );
     }
 
-    function _getCreatorName() private view returns (string memory) {
+    function _getCreatorName() private pure returns (string memory) {
         // Fetch the creator's name from an off-chain source
         // For simplicity, return a default name here
         return "Anonymous";
@@ -244,13 +269,15 @@ contract ProjectContract {
         project.isApproved = true;
 
         // Ak edit
-        projectCount++;
-        IdToApprovedProject[projectCount] = ApprovedProject(
+        uint projectId = project.Id;
+
+        IdToApprovedProject[projectId] = ApprovedProject(
             project.name,
             project.creator,
             project.description,
             project.capitalNeeded,
-            _project
+            _project,
+            projectId
         );
     }
 
@@ -282,7 +309,11 @@ contract ProjectContract {
     }
 
     // Ak Edit
-    function allProjects() public view returns (ApprovedProject[] memory) {
+    function getAllApprovedProjects()
+        public
+        view
+        returns (ApprovedProject[] memory)
+    {
         // projectCount
         uint currentIndex = 0;
 
