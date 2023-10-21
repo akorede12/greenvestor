@@ -35,10 +35,7 @@ contract LoanContract {
         require(_borrower != address(0), "Invalid borrower address.");
         require(_loanAmount > 0, "Loan amount must be greater than zero.");
         require(_interestRate > 0, "Interest rate must be greater than zero.");
-        require(
-            _repaymentTerm > 0,
-            "Repayment term must be greater than zero."
-        );
+        require(_repaymentTerm > 0, "Repayment term must be greater than zero.");
 
         uint256 repaymentAmount = (_loanAmount * (100 + _interestRate)) / 100;
 
@@ -68,15 +65,9 @@ contract LoanContract {
     function repayLoan(uint256 _loanIndex) external payable {
         require(_loanIndex < loans.length, "Invalid loan index.");
         Loan storage loan = loans[_loanIndex];
-        require(
-            loan.borrower == msg.sender,
-            "Only the borrower can repay the loan."
-        );
+        require(loan.borrower == msg.sender, "Only the borrower can repay the loan.");
         require(!loan.isClosed, "Loan is already closed.");
-        require(
-            msg.value == loan.repaymentAmount,
-            "Incorrect repayment amount."
-        );
+        require(msg.value == loan.repaymentAmount, "Incorrect repayment amount.");
 
         loan.remainingAmount -= msg.value;
         if (loan.remainingAmount == 0) {
@@ -104,12 +95,15 @@ edit
 add allProjects function to return all the projects created on the platform
 */
 contract ProjectContract {
-    // Ak Edit
-    // appreved projects count
-    uint public projectCount;
-    mapping(uint => ApprovedProject) public IdToApprovedProject;
+    // Ak Edit 
+    // approved projects count
+    uint public projectCount; 
+    mapping( uint => ApprovedProject) public IdToApprovedProject;
 
     mapping(uint => Project) public IdToProjects;
+
+    // Ids or unapproved projects
+    uint [] public unapprovedIds;
 
     struct ApprovedProject {
         string name;
@@ -139,13 +133,14 @@ contract ProjectContract {
         string name,
         string description,
         uint256 capitalNeeded,
-        uint256 projectId
+        uint256 indexed projectId
     );
-    event InvestmentMade(
-        address indexed investor,
-        address indexed project,
-        uint256 amount
+    event ProjectApproved(
+        address indexed creatorAddress,
+        string name,
+        uint256 indexed projectId
     );
+    event InvestmentMade(address indexed investor, address indexed project, uint256 amount);
     event FundsWithdrawn(address indexed project, uint256 amount);
     event ProfitsPaid(address indexed project, uint256 amount);
 
@@ -155,11 +150,25 @@ contract ProjectContract {
     }
 
     modifier onlyPlatformOwner() {
-        require(
-            msg.sender == platformOwner,
-            "Only the platform owner can call this function."
-        );
+        require(msg.sender == platformOwner, "Only the platform owner can call this function.");
         _;
+    }
+
+    function addId(uint _Id) internal {
+        unapprovedIds.push(_Id);
+    }
+
+    function removeId(uint _Id) internal{
+        for(uint i = 0; i < unapprovedIds.length; i++ ){
+            if(unapprovedIds[i] == _Id){
+                unapprovedIds[i] = unapprovedIds[unapprovedIds.length - 1];
+                unapprovedIds.pop();
+            }
+        }
+    }
+
+    function getUnapprovedIds() public view returns(uint[] memory){
+        return unapprovedIds;
     }
 
     function createProject(
@@ -168,25 +177,17 @@ contract ProjectContract {
         uint256 _capitalNeeded
     ) external {
         require(bytes(_name).length > 0, "Project name must not be empty.");
-        require(
-            bytes(_description).length > 0,
-            "Project description must not be empty."
-        );
-        require(
-            _capitalNeeded > 0,
-            "Capital needed must be greater than zero."
-        );
+        require(bytes(_description).length > 0, "Project description must not be empty.");
+        require(_capitalNeeded > 0, "Capital needed must be greater than zero.");
 
         Project storage project = projects[msg.sender];
-        require(
-            bytes(project.name).length == 0,
-            "Project already exists for this creator."
-        );
+        require(bytes(project.name).length == 0, "Project already exists for this creator.");
 
-        projectCount++;
+        projectCount++; 
 
         uint currentProjectCount = projectCount;
 
+        // update projects mapping
         project.name = _name;
         project.creator = _getCreatorName();
         project.description = _description;
@@ -203,13 +204,10 @@ contract ProjectContract {
         newProject.isApproved = project.isApproved;
         newProject.Id = project.Id;
 
-        emit ProjectCreated(
-            msg.sender,
-            _name,
-            _description,
-            _capitalNeeded,
-            currentProjectCount
-        );
+        // add project Id to unapproved projects array
+        addId(currentProjectCount);
+
+        emit ProjectCreated(msg.sender, _name, _description, _capitalNeeded, currentProjectCount);
     }
 
     function _getCreatorName() private pure returns (string memory) {
@@ -219,10 +217,7 @@ contract ProjectContract {
     }
 
     function invest(address _project) external payable {
-        require(
-            bytes(projects[_project].name).length > 0,
-            "Project does not exist."
-        );
+        require(bytes(projects[_project].name).length > 0, "Project does not exist.");
         require(msg.value > 0, "Investment amount must be greater than zero.");
 
         Project storage project = projects[_project];
@@ -233,10 +228,7 @@ contract ProjectContract {
     }
 
     function withdrawFunds(address _project) external {
-        require(
-            msg.sender == _project || msg.sender == platformOwner,
-            "Only the project creator or platform owner can call this function."
-        );
+        require(msg.sender == _project || msg.sender == platformOwner, "Only the project creator or platform owner can call this function.");
 
         Project storage project = projects[_project];
         uint256 amountToWithdraw = project.capitalNeeded;
@@ -258,17 +250,14 @@ contract ProjectContract {
     }
 
     function approveProject(address _project) external onlyPlatformOwner {
-        require(
-            bytes(projects[_project].name).length > 0,
-            "Project does not exist."
-        );
+        require(bytes(projects[_project].name).length > 0, "Project does not exist.");
 
         Project storage project = projects[_project];
         require(!project.isApproved, "Project is already approved.");
 
         project.isApproved = true;
 
-        // Ak edit
+        // Ak edit 
         uint projectId = project.Id;
 
         IdToApprovedProject[projectId] = ApprovedProject(
@@ -279,13 +268,15 @@ contract ProjectContract {
             _project,
             projectId
         );
+
+        // remove project Id from unapproved array
+        removeId(projectId);
+
+        emit ProjectApproved( _project, project.name, projectId);
     }
 
     function payoutProfits(address _project) external {
-        require(
-            msg.sender == _project || msg.sender == platformOwner,
-            "Only the project creator or platform owner can call this function."
-        );
+        require(msg.sender == _project || msg.sender == platformOwner, "Only the project creator or platform owner can call this function.");
 
         Project storage project = projects[_project];
         require(project.isApproved, "Project is not approved yet.");
@@ -297,8 +288,7 @@ contract ProjectContract {
         for (uint256 i = 0; i < project.investors.length; i++) {
             address investor = project.investors[i];
             uint256 investmentAmount = project.investments[investor];
-            uint256 profit = (investmentAmount * totalProfits) /
-                project.capitalNeeded;
+            uint256 profit = (investmentAmount * totalProfits) / project.capitalNeeded;
 
             project.investments[investor] = 0;
 
@@ -308,28 +298,20 @@ contract ProjectContract {
         }
     }
 
-    // Ak Edit
-    function getAllApprovedProjects()
-        public
-        view
-        returns (ApprovedProject[] memory)
-    {
+    // Ak Edit 
+    function getAllApprovedProjects() public view returns( ApprovedProject[] memory ){
         // projectCount
-        uint currentIndex = 0;
+        uint currentIndex = 0; 
 
-        ApprovedProject[] memory allApprovedProjects = new ApprovedProject[](
-            projectCount
-        );
+        ApprovedProject[] memory allApprovedProjects = new ApprovedProject[] (projectCount);
 
-        for (uint i = 0; i < projectCount; i++) {
+        for(uint i = 0; i < projectCount; i++) {
             uint currentProjectId = i + 1;
             // reference current project details
-            ApprovedProject storage currentProject = IdToApprovedProject[
-                currentProjectId
-            ];
-            // store current project in allApprovedProjects array
+            ApprovedProject storage currentProject = IdToApprovedProject[currentProjectId];
+            // store current project in allApprovedProjects array 
             allApprovedProjects[currentIndex] = currentProject;
-            // increase index
+            // increase index 
             currentIndex += 1;
         }
         return allApprovedProjects;
@@ -358,10 +340,7 @@ contract ProfitDistribution {
     }
 
     function distributeProfits() external {
-        require(
-            totalInvestment > 0,
-            "No investments available for profit distribution."
-        );
+        require(totalInvestment > 0, "No investments available for profit distribution.");
 
         uint256 totalReturns = (totalInvestment * RATE_OF_RETURN) / 100;
 
@@ -397,4 +376,5 @@ contract ProfitDistribution {
 
 contract CombinedContract is LoanContract, ProjectContract, ProfitDistribution {
     constructor() {}
+
 }
